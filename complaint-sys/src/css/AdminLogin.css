@@ -1,0 +1,141 @@
+/* src/Pages/AdminLogin.css - Pure CSS, no Tailwind */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f0f2f5;
+}
+
+.login-wrapper {
+  min-height: 100vh;
+  /* background image with dark overlay for readable form text */
+  background-image: 
+    linear-gradient(rgba(2,6,23,0.45), rgba(2,6,23,0.45)),
+    url('https://upload.wikimedia.org/wikipedia/commons/1/11/GCTU_Signage_01.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* fallback color */
+  background-color: #1e3a8a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #fff;
+}
+
+.login-box {
+  background: white;
+  width: 100%;
+  max-width: 440px;
+  border-radius: 20px;
+  padding: 50px 40px;
+  text-align: center;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+  width: 90px;
+  height: 90px;
+  background: transparent;
+  color: white;
+  font-size: 44px;
+  font-weight: bold;
+  border-radius: 50%;
+  margin: -46px auto 18px; /* overlap the card to rest on background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+}
+
+.logo img{
+  width:120px;
+  height:120px;
+  object-fit:cover;
+  border-radius:12px;
+  background: transparent;
+  border: none;
+  filter: drop-shadow(0 8px 20px rgba(2,6,23,0.06));
+  mix-blend-mode: multiply;
+  opacity: 0.98;
+}
+
+.login-box h2 {
+  font-size: 32px;
+  color: #1e293b;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.subtitle {
+  color: #64748b;
+  margin-bottom: 40px;
+  font-size: 17px;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 18px 20px;
+  margin: 12px 0;
+  font-size: 17px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.3s;
+}
+
+.login-box input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+.login-box button {
+  width: 50%;
+  padding: 18px;
+  margin-top: 15px;
+  background: linear-gradient(135deg, #1e40af, #3b82f6);
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+.login-box button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(59, 130, 246, 0.5);
+}
+
+.error {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 14px;
+  border-radius: 10px;
+  margin: 20px 0;
+  font-weight: 500;
+}
+
+.footer {
+  margin-top: 40px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .login-box {
+    padding: 40px 25px;
+  }
+  .login-box h2 {
+    font-size: 28px;
+  }
+}

@@ -1,0 +1,180 @@
+/* src/Pages/ComplaintForm.css - Final Clean Version (No Tailwind) */
+
+/* Modern, professional Complaint Form stylesheet */
+
+:root{
+  --bg-1: #f8fbff;
+  --card-bg: #ffffff;
+  --primary: #2563eb;
+  --primary-600: #1d4ed8;
+  --muted: #64748b;
+  --accent: #6d28d9;
+  --success: #16a34a;
+  --danger: #dc2626;
+  --glass: rgba(255,255,255,0.72);
+  --radius-lg: 14px;
+  --shadow-1: 0 8px 30px rgba(2,6,23,0.08);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: Inter, 'Segoe UI', Roboto, system-ui, -apple-system, 'Helvetica Neue', Arial;
+  background: linear-gradient(180deg, var(--bg-1) 0%, #eef2ff 100%);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  color: #0f172a;
+}
+
+/* Page layout */
+.complaint-page{
+  min-height:100vh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:56px 20px;
+}
+
+/* Card */
+.form-container{
+  width:100%;
+  max-width:1000px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.95), var(--card-bg));
+  border-radius:var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  overflow:hidden;
+  border:1px solid rgba(15,23,42,0.04);
+}
+
+/* Header */
+.form-header{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:36px 32px;
+  background: linear-gradient(90deg, rgba(37,99,235,0.95), rgba(61,21,89,0.9));
+  color:#fff;
+}
+.form-header h1{font-size:26px;margin:0;font-weight:700;letter-spacing:-0.2px}
+.form-header p{margin:0;font-size:14px;opacity:0.92}
+
+/* Body */
+.form-body{
+  padding:36px 44px;
+}
+
+.section-title{
+  font-size:18px;
+  color:var(--primary-600);
+  margin:20px 0 12px 0;
+  font-weight:600;
+}
+
+/* Grid */
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.full-width{grid-column:1 / -1}
+
+/* Form controls */
+label{display:block;margin-bottom:8px;font-weight:600;color:#0f172a;font-size:14px}
+
+input,select,textarea{
+  width:100%;
+  padding:12px 14px;
+  border-radius:10px;
+  border:1px solid #e6edf3;
+  background:linear-gradient(180deg,#fff,#fbfdff);
+  font-size:14px;
+  color:#0f172a;
+  transition:box-shadow .18s ease,border-color .18s ease,transform .12s ease;
+}
+select{appearance:none}
+input::placeholder, textarea::placeholder{color:#94a3b8}
+
+input:focus,select:focus,textarea:focus{
+  outline:none;
+  border-color:var(--primary);
+  box-shadow:0 8px 24px rgba(37,99,235,0.12);
+  transform:translateY(-1px);
+}
+
+textarea{min-height:160px;resize:vertical}
+
+.file-input{padding:8px 0}
+.checkbox-group{display:flex;align-items:center;gap:10px}
+
+/* Buttons */
+.submit-btn{
+  display:inline-block;
+  background:linear-gradient(90deg,var(--primary-600),var(--accent));
+  color:#fff;
+  padding:12px 26px;
+  border-radius:10px;
+  border:none;
+  font-weight:700;
+  font-size:15px;
+  cursor:pointer;
+  box-shadow:0 8px 18px rgba(37,99,235,0.14);
+  transition:transform .14s ease,box-shadow .14s ease;
+}
+.submit-btn:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(37,99,235,0.18)}
+
+.secondary-btn{
+  background:transparent;
+  border:1px solid rgba(15,23,42,0.06);
+  padding:10px 14px;
+  border-radius:10px;
+  cursor:pointer;
+  color:var(--muted);
+}
+
+/* Alerts */
+.alert{padding:12px 14px;border-radius:10px;margin-bottom:18px;font-weight:600}
+.alert-error{background:#fff5f5;border:1px solid rgba(220,38,38,0.08);color:var(--danger)}
+.alert-success{background:#ecfdf5;border:1px solid rgba(16,185,129,0.08);color:var(--success)}
+
+.footer-text{color:var(--muted);font-size:13px;margin-top:18px;text-align:center}
+
+/* Complaint list items */
+.complaint-item{
+  background:var(--glass);
+  padding:14px;
+  border-radius:12px;
+  border:1px solid rgba(15,23,42,0.04);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.complaint-header{display:flex;justify-content:space-between;align-items:center}
+.status{padding:6px 10px;border-radius:999px;font-weight:700;font-size:12px}
+.status.pending{background:#fff7ed;color:#92400e}
+.status.resolved{background:#ecfdf5;color:#14532d}
+
+.complaint-actions{display:flex;gap:10px;align-items:center}
+.status-select{padding:8px;border-radius:8px}
+.delete-btn{background:transparent;border:1px solid rgba(220,38,38,0.12);color:var(--danger);padding:8px 10px;border-radius:8px;cursor:pointer}
+
+/* Responsive */
+@media (max-width:900px){
+  .form-body{padding:28px}
+  .form-grid{grid-template-columns:1fr}
+  .form-header{padding:28px}
+}
+
+@media (max-width:420px){
+  .form-body{padding:20px}
+  .form-header h1{font-size:20px}
+  .submit-btn{width:100%;text-align:center}
+}
+
+/* Accessibility helpers */
+:focus-visible{outline:2px solid rgba(37,99,235,0.18);outline-offset:3px}
+
+.GCTU-Logo img {
+  width: 80px;
+  height: auto;
+  margin-bottom: 12px;
+  
+}
