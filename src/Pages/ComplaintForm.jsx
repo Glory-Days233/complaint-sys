@@ -119,8 +119,12 @@ export default function ComplaintForm() {
       const data = await response.json();
       console.log('Complaint submitted:', data);
 
-      // Email is now sent by the backend automatically
+      // Clear any previous errors and show success
+      setError('');
       setSuccess('Thank you! Your complaint has been received. A confirmation email has been sent.');
+
+      // Scroll to top so user sees the success message
+      window.scrollTo({ top: 0, behavior: 'smooth' });
 
       // Reset form
       setFormData({
