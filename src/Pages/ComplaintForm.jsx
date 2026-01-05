@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import API_BASE from '../api/config';
 import '../css/ComplaintForm.css';
-import emailjs from "@emailjs/browser";
+
 import Visual from '../assets/Visual.png';
 
 
@@ -54,35 +54,33 @@ export default function ComplaintForm() {
 
   const validateForm = () => {
     let newErrors = {};
-    if (!formData.fullName.trim())
-      { newErrors.fullName = 'Full Name is required'; 
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = 'Full Name is required';
 
-      }
-      if (!formData.studentId.trim())
-      { newErrors.studentId = 'Student ID is required';
+    }
+    if (!formData.studentId.trim()) {
+      newErrors.studentId = 'Student ID is required';
 
-      }
-      if (!formData.email.trim())
-      {newErrors.email = 'Email is required';}
-      else if (!/\S+@\S+\.\S+$/.test(formData.email))
-      { newErrors.email = 'Email is invalid'; 
+    }
+    if (!formData.email.trim()) { newErrors.email = 'Email is required'; }
+    else if (!/\S+@\S+\.\S+$/.test(formData.email)) {
+      newErrors.email = 'Email is invalid';
 
-      }
-      if (formData.complaintType. length=== 0)
-      { newErrors.complaintType = 'Please select at least one complaint type';
+    }
+    if (formData.complaintType.length === 0) {
+      newErrors.complaintType = 'Please select at least one complaint type';
 
-      }
-      if (formData.complaintType.includes("Other") && 
-          !formData.otherDetails.trim())
-        { newErrors.otherDetails = 'Please provide details for "Other" complaint type';
+    }
+    if (formData.complaintType.includes("Other") &&
+      !formData.otherDetails.trim()) {
+      newErrors.otherDetails = 'Please provide details for "Other" complaint type';
 
-        }
-      if (!formData.description.trim())
-      { newErrors.description = 'Description is required';}
-      else if (formData.description.trim().length < 10)
-      { newErrors.description = 'Description should be at least 10 characters long';
-      
-      
+    }
+    if (!formData.description.trim()) { newErrors.description = 'Description is required'; }
+    else if (formData.description.trim().length < 10) {
+      newErrors.description = 'Description should be at least 10 characters long';
+
+
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -121,27 +119,8 @@ export default function ComplaintForm() {
       const data = await response.json();
       console.log('Complaint submitted:', data);
 
-      // Send email via EmailJS
-      emailjs.send(
-        "Complaint Sys",        // Service ID
-        "template_tz1yigv",     // Template ID
-        {
-          name: formData.fullName,
-          email: formData.email,
-          complaint_type: formData.complaintType.join(", "),
-          complaint_desc: formData.description,
-          other_details: formData.otherDetails || "N/A"
-        },
-        "OwXsUH2O0sPaCuzNC"     // Public Key
-      )
-      .then(() => {
-        console.log("Email sent successfully!");
-        setSuccess('Thank you! Your complaint has been received. A confirmation email has been sent.');
-      })
-      .catch((err) => {
-        console.error("Email sending error:", err);
-        setSuccess('Complaint saved, but email could not be sent.');
-      });
+      // Email is now sent by the backend automatically
+      setSuccess('Thank you! Your complaint has been received. A confirmation email has been sent.');
 
       // Reset form
       setFormData({
@@ -165,11 +144,11 @@ export default function ComplaintForm() {
     <div className="complaint-page">
       <div className="form-container">
         <div className="form-header">
-          <img 
-src={Visual} 
-alt="GCTU Logo" 
-className="form-logo" // (Using the class I provided in the CSS)
-/>
+          <img
+            src={Visual}
+            alt="GCTU Logo"
+            className="form-logo" // (Using the class I provided in the CSS)
+          />
           <h1>GCTU Student Complaint Form</h1>
           <p>Please fill out the form below. Fields marked with * are required.</p>
         </div>
@@ -190,7 +169,7 @@ className="form-logo" // (Using the class I provided in the CSS)
 
               <div>
                 <label>Student ID / Index Number *</label>
-                <input type="text" name="studentId" value={formData.studentId} onChange={handleChange}  />
+                <input type="text" name="studentId" value={formData.studentId} onChange={handleChange} />
                 {errors.studentId && <small className='error'>{errors.studentId}</small>}
               </div>
 
@@ -216,7 +195,7 @@ className="form-logo" // (Using the class I provided in the CSS)
               <button type="button" className="dropdown-toggle" onClick={() => setDropdownOpen(prev => !prev)}>
                 {formData.complaintType.length > 0
                   ? formData.complaintType.join(", ")
-                  : "Select your complaint(s)"} 
+                  : "Select your complaint(s)"}
               </button>
               {dropdownOpen && (
                 <div className="dropdown-menu">
@@ -236,26 +215,26 @@ className="form-logo" // (Using the class I provided in the CSS)
               {errors.complaintType && <small className='error'>{errors.complaintType}</small>}
             </div>
 
-            
+
 
             {formData.complaintType.includes("Other") && (
               <div>
-              <textarea
-                name="otherDetails"
-                placeholder="Please describe your issue..."
-                value={formData.otherDetails}
-                onChange={handleChange}
-                className="other-textarea"
-               
-              />
-                 {errors.otherDetails && (
-                  <small className="error">{errors.otherDetails}</small>
-                 )}
-              </div>
-               )}
+                <textarea
+                  name="otherDetails"
+                  placeholder="Please describe your issue..."
+                  value={formData.otherDetails}
+                  onChange={handleChange}
+                  className="other-textarea"
 
-              
-           
+                />
+                {errors.otherDetails && (
+                  <small className="error">{errors.otherDetails}</small>
+                )}
+              </div>
+            )}
+
+
+
             <h2 className="section-title">Describe the Problem *</h2>
             <textarea
               name="description"
@@ -264,8 +243,8 @@ className="form-logo" // (Using the class I provided in the CSS)
               placeholder="Explain exactly what’s happening..."
               className="description-box"
             />
-            {errors.description && 
-            (<small className='error'>{errors.description}</small>)}
+            {errors.description &&
+              (<small className='error'>{errors.description}</small>)}
 
             <button type="submit" className="submit-btn">
               Submit Complaint
