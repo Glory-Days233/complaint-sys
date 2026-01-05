@@ -12,6 +12,9 @@ export default function AdminDashboard() {
     const [selectedComplaint, setSelectedComplaint] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState(false); // State for mobile sidebar
 
+    // New Features State
+    const [selectedIds, setSelectedIds] = useState([]);
+
     const navigate = useNavigate();
 
     /* ===============================
@@ -27,8 +30,8 @@ export default function AdminDashboard() {
 
             try {
                 const token = localStorage.getItem('adminToken');
-                const res = await fetch(`${API_BASE} /api/complaints`, {
-                    headers: token ? { Authorization: `Bearer ${token} ` } : {},
+                const res = await fetch(`${API_BASE}/api/complaints`, {
+                    headers: token ? { Authorization: `Bearer ${token}` } : {},
                 });
 
                 if (!res.ok) {
@@ -70,6 +73,59 @@ export default function AdminDashboard() {
         localStorage.setItem("complaints", JSON.stringify(updated));
     };
 
+    /* ===============================
+       BULK ACTIONS
+    =============================== */
+    const toggleSelection = (id) => {
+        setSelectedIds(prev =>
+            prev.includes(id) ? prev.filter(pid => pid !== id) : [...prev, id]
+        );
+    };
+
+    const toggleSelectAll = () => {
+        if (selectedIds.length === filteredComplaints.length) {
+            setSelectedIds([]);
+        } else {
+            setSelectedIds(filteredComplaints.map(c => c.id));
+        }
+    };
+
+    const handleBulkDelete = async () => {
+        if (selectedIds.length === 0) return;
+
+        const result = await Swal.fire({
+            title: `Delete ${selectedIds.length} complaints?`,
+            text: "This action cannot be undone!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            confirmButtonText: "Yes, delete them!"
+        });
+
+        if (!result.isConfirmed) return;
+
+        try {
+            const token = localStorage.getItem("adminToken");
+            const res = await fetch(`${API_BASE}/api/complaints/bulk-delete`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ ids: selectedIds })
+            });
+
+            if (!res.ok) throw new Error("Batch delete failed");
+
+            setComplaints(complaints.filter(c => !selectedIds.includes(c.id)));
+            setSelectedIds([]);
+            Swal.fire("Deleted!", "Complaints have been deleted.", "success");
+        } catch (err) {
+            console.error(err);
+            Swal.fire("Error", "Failed to delete complaints", "error");
+        }
+    };
+
     const handleDelete = async (id) => {
         const result = await Swal.fire({
             title: "Are you sure?",
@@ -85,9 +141,9 @@ export default function AdminDashboard() {
 
         try {
             const token = localStorage.getItem("adminToken");
-            const res = await fetch(`${API_BASE} /api/complaints / ${id} `, {
+            const res = await fetch(`${API_BASE}/api/complaints/${id}`, {
                 method: "DELETE",
-                headers: { Authorization: `Bearer ${token} ` },
+                headers: { Authorization: `Bearer ${token}` },
             });
 
             if (!res.ok) throw new Error("Failed to delete");
@@ -129,8 +185,8 @@ export default function AdminDashboard() {
         <div className="admin-layout">
 
             {/* ===============================
-          MOBILE NAVBAR
-      =============================== */}
+           MOBILE NAVBAR
+       =============================== */}
             <header className="mobile-navbar">
                 <button
                     className="menu-btn"
@@ -142,8 +198,8 @@ export default function AdminDashboard() {
             </header>
 
             {/* ===============================
-          SIDEBAR (MODIFIED)
-      =============================== */}
+           SIDEBAR (MODIFIED)
+       =============================== */}
             <aside className={`sidebar ${sidebarOpen ? "open" : ""} `}>
                 <div className="sidebar-header">
                     <img
@@ -203,7 +259,13 @@ export default function AdminDashboard() {
             <main className="dashboard-main">
                 <header className="dashboard-header">
                     <h1>Admin Dashboard</h1>
-                    <p>Manage and review student complaints</p>
+                    <div className="header-actions">
+                        {selectedIds.length > 0 && (
+                            <button className="bulk-delete-btn" onClick={handleBulkDelete}>
+                                Delete Selected ({selectedIds.length})
+                            </button>
+                        )}
+                    </div>
                 </header>
                 {/* ... (STATISTICS SECTION) ... */}
                 <section className="stats-grid">
@@ -227,6 +289,13 @@ export default function AdminDashboard() {
                     <table className="complaints-table">
                         <thead>
                             <tr>
+                                <th>
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedIds.length === filteredComplaints.length && filteredComplaints.length > 0}
+                                        onChange={toggleSelectAll}
+                                    />
+                                </th>
                                 <th>Name</th>
                                 <th>Student ID</th>
                                 <th>Issue</th>
@@ -240,13 +309,20 @@ export default function AdminDashboard() {
                         <tbody>
                             {filteredComplaints.length === 0 ? (
                                 <tr>
-                                    <td colSpan="7" className="empty-table">
+                                    <td colSpan="8" className="empty-table">
                                         No complaints found
                                     </td>
                                 </tr>
                             ) : (
                                 filteredComplaints.map((c) => (
-                                    <tr key={c.id}>
+                                    <tr key={c.id} className={selectedIds.includes(c.id) ? "selected-row" : ""}>
+                                        <td>
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedIds.includes(c.id)}
+                                                onChange={() => toggleSelection(c.id)}
+                                            />
+                                        </td>
                                         <td>{c.name}</td>
                                         <td>{c.studentId}</td>
                                         <td>{c.complaint.slice(0, 35)}...</td>
@@ -341,7 +417,6 @@ export default function AdminDashboard() {
                     </div>
                 </div>
             )}
-
         </div>
     );
 }
