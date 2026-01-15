@@ -51,6 +51,8 @@ export default function AdminDashboard() {
                     timestamp: c.createdAt || c.created_at || Date.now(),
                     status: (c.status || 'pending').toLowerCase(),
                     images: c.images || [],
+                    email: c.email || '',
+                    phone: c.phone || '',
                 }));
 
                 setComplaints(mapped);
@@ -390,6 +392,7 @@ export default function AdminDashboard() {
                             <p><strong>Name:</strong> {selectedComplaint.name}</p>
                             <p><strong>Student ID:</strong> {selectedComplaint.studentId}</p>
                             <p><strong>Email:</strong> {selectedComplaint.email || "N/A"}</p>
+                            <p><strong>Phone:</strong> {selectedComplaint.phone || "N/A"}</p>
 
                             <p>
                                 <strong>Issue Type:</strong>
