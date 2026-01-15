@@ -16,6 +16,7 @@ export default function ComplaintForm() {
     complaintType: [],
     otherDetails: '',
     description: '',
+    images: [],
   });
 
   const [success, setSuccess] = useState('');
@@ -50,6 +51,16 @@ export default function ComplaintForm() {
     } else {
       setFormData(prev => ({ ...prev, complaintType: prev.complaintType.filter(item => item !== value) }));
     }
+  };
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length > 3) {
+      setErrors(prev => ({ ...prev, images: 'You can upload a maximum of 3 images' }));
+      return;
+    }
+    setFormData(prev => ({ ...prev, images: files }));
+    setErrors(prev => ({ ...prev, images: '' })); // Clear error if valid
   };
 
   const validateForm = () => {
@@ -96,20 +107,24 @@ export default function ComplaintForm() {
     }
 
     try {
+      const formDataToSend = new FormData();
+      formDataToSend.append('name', formData.fullName);
+      formDataToSend.append('studentId', formData.studentId);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('phone', formData.phone);
+      formDataToSend.append('category', formData.complaintType[0] || 'Other');
+      formDataToSend.append('subject', formData.complaintType.join(', '));
+      formDataToSend.append('description', formData.description);
+
+      formData.images.forEach((image) => {
+        formDataToSend.append('images', image);
+      });
+
       // Send complaint to backend API
       const response = await fetch(`${API_BASE}/api/complaints`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
-          category: formData.complaintType[0] || 'Other',
-          subject: formData.complaintType.join(', '),
-          description: formData.description,
-        }),
+        // Do NOT set Content-Type header when sending FormData
+        body: formDataToSend,
       });
 
       if (!response.ok) {
@@ -135,7 +150,9 @@ export default function ComplaintForm() {
         department: '',
         complaintType: [],
         otherDetails: '',
+        otherDetails: '',
         description: '',
+        images: [],
       });
       setDropdownOpen(false);
     } catch (error) {
@@ -249,6 +266,28 @@ export default function ComplaintForm() {
             />
             {errors.description &&
               (<small className='error'>{errors.description}</small>)}
+
+            <div className="full-width">
+              <label>Attach Images (Max 3, Optional)</label>
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleImageChange}
+                className="file-input"
+              />
+              {errors.images && <small className='error'>{errors.images}</small>}
+              {formData.images.length > 0 && (
+                <div className="file-preview">
+                  <small>Selected files:</small>
+                  <ul>
+                    {formData.images.map((file, index) => (
+                      <li key={index}>{file.name}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
 
             <button type="submit" className="submit-btn">
               Submit Complaint

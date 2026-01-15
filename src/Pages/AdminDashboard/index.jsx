@@ -45,7 +45,7 @@ export default function AdminDashboard() {
                 const mapped = data.map((c) => ({
                     id: c._id,
                     name: c.name || c.fullName || 'N/A',
-                    studentId: c.studentId || c.phone || 'N/A',
+                    studentId: c.studentId || 'N/A',
                     complaint: c.description || c.complaint || c.subject || '',
                     type: c.category ? [c.category] : (c.type || []),
                     timestamp: c.createdAt || c.created_at || Date.now(),
