@@ -50,6 +50,7 @@ export default function AdminDashboard() {
                     type: c.category ? [c.category] : (c.type || []),
                     timestamp: c.createdAt || c.created_at || Date.now(),
                     status: (c.status || 'pending').toLowerCase(),
+                    images: c.images || [],
                 }));
 
                 setComplaints(mapped);
@@ -404,6 +405,24 @@ export default function AdminDashboard() {
                                 <strong>Message:</strong>
                                 <p>{selectedComplaint.complaint}</p>
                             </div>
+
+                            {/* Image Gallery */}
+                            {selectedComplaint.images && selectedComplaint.images.length > 0 && (
+                                <div className="complaint-images">
+                                    <strong>Attached Images:</strong>
+                                    <div className="image-gallery">
+                                        {selectedComplaint.images.map((img, index) => (
+                                            <a key={index} href={`${API_BASE}${img}`} target="_blank" rel="noopener noreferrer">
+                                                <img
+                                                    src={`${API_BASE}${img}`}
+                                                    alt={`Attachment ${index + 1}`}
+                                                    className="complaint-img-thumbnail"
+                                                />
+                                            </a>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         <div className="modal-footer">
